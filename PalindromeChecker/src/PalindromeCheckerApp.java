@@ -1,22 +1,47 @@
-import java.util.Deque;
+import java.util.Stack;
 import java.util.ArrayDeque;
+interface PalindromeStrategy {
+    boolean check(String input);
+}
+class StackStrategy implements PalindromeStrategy {
 
-public class PalindromeCheckerApp {
-    public static void main(String[] args) {
-        // Define the input string
-        String input = "refer";
-        Deque<Character> deque = new ArrayDeque<>();
+    public boolean check(String input) {
+
+        Stack<Character> stack = new Stack<>();
+
         for (char c : input.toCharArray()) {
-            deque.addLast(c);
+            stack.push(c);
         }
-        boolean isPalindrome = true;
-        while (deque.size() > 1) {
-            if (!deque.removeFirst().equals(deque.removeLast())) {
-                isPalindrome = false;
-                break;
+        for (char c : input.toCharArray()) {
+            if (c != stack.pop()) {
+                return false;
             }
         }
+        return true;
+    }
+}
+class DequeStrategy implements PalindromeStrategy {
+    public boolean check(String input) {
+        ArrayDeque<Character> deque = new ArrayDeque<>();
+        for (char c : input.toCharArray()) {
+            deque.add(c);
+        }
+        while (deque.size() > 1) {
+
+            if (deque.removeFirst() != deque.removeLast()) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+public class PalindromeCheckerApp {
+    public static void main(String[] args) {
+        String input = "madam";
+        PalindromeStrategy strategy;
+        strategy = new StackStrategy();
+        boolean result = strategy.check(input);
         System.out.println("Input : " + input);
-        System.out.println("Is Palindrome?   : " + isPalindrome);
+        System.out.println("Is Palindrome? : " + result);
     }
 }
